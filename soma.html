@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./vue.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        <span>Rafael </span>
+        <input type="text" v-model="rafael" />
+        <span>Amanda </span>
+        <input type="text" v-model="amanda" />
+        <button @click="distribui()">Distribui Valor</button>
+      </div>
+      <hr />
+      <div>
+        <span>Sobra Rafael</span>
+        <input type="text" v-model="sobraRafael" />
+        <span>Sobra Amanda </span>
+        <input type="text" v-model="sobraAmanda" />
+      </div>
+      <hr />
+      <div>
+        <p>Saldo Total {{showValor}}</p>
+      </div>
+      <hr />
+      <div>
+        <span>Insere gasto</span>
+        <input type="text" v-model="gasto" />
+        <span>Insere valor</span>
+        <input type="text" v-model="valor" />
+      </div>
+      <br />
+      <div>
+        <button @click="addGasto()">Add</button>
+      </div>
+      <div>
+        <ul v-for="(p, index) in task" style="display: flex">
+          <li>{{index}} - {{p.gasto}} - {{p.valor}}</li>
+          <div>
+            <select style="margin-left: 1rem" @change="clientes($event)">
+              <option value="conta" selected>Select</option>
+              <option value="rafael">Rafael </option>
+              <option value="amanda">Amanda </option>
+            </select>
+          </div>
+        </ul>
+      </div>
+      <hr />
+      <p>Total Somado dos itens {{somaTotal}}</p>
+    </div>
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          sobraRafael: 0,
+          sobraAmanda: 0,
+          rafael: 0,
+          amanda: 0,
+          showValor: 0,
+          gasto: "",
+          valor: "",
+          task: [],
+          somaTotal: 0,
+          nomeClientes: "",
+          //   clientes: [{ nome: "rafael" }, { nome: "amanda" }],
+        },
+        methods: {
+          addGasto() {
+            this.task.push({ gasto: this.gasto, valor: this.valor });
+            let value = this.valor;
+            this.somaTotal = this.task.reduce((n1, n2) => parseInt(n1) + parseInt(n2.valor),0);
+          },
+
+          distribui() {
+            this.sobraRafael =
+              parseInt(this.rafael) + parseInt(this.sobraRafael);
+            this.sobraAmanda =
+              parseInt(this.amanda) + parseInt(this.sobraAmanda);
+
+            this.showValor =
+              parseInt(this.sobraRafael) + parseInt(this.sobraAmanda);
+          },
+
+          clientes(e) {
+            let nomeCliente = e.target.value;
+            let priceItem = parseInt(this.somaTotal);
+            if (nomeCliente == "rafael") {
+              let valorRestanteRafael = parseInt(this.sobraRafael) - this.valor ;
+              this.sobraRafael = valorRestanteRafael
+            } else {
+                let valorRestanteAmanda = parseInt(this.sobraAmanda) - this.valor ;
+              this.sobraAmanda = valorRestanteAmanda
+            }
+        
+            let saldoTotal =  parseInt(this.sobraRafael) + parseInt(this.sobraAmanda)
+            this.showValor = saldoTotal
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
